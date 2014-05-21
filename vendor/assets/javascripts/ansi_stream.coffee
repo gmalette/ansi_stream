@@ -7,13 +7,12 @@ class AnsiStream
     parts = text.split(/\033\[/)
     parts = parts.filter (part) -> part
 
-    spans = for part in parts
+    spans = document.createDocumentFragment()
+    for part in parts
       [partText, styles] = @_extractTextAndStyles(part)
-      if styles
-        @style.apply(styles)
-        @span.create(partText, @style)
-      else
-        partText
+      @style.apply(styles)
+      span = @span.create(partText, @style)
+      spans.appendChild(span)
 
     spans
 
@@ -80,7 +79,6 @@ class AnsiStyle
 
 class AnsiSpan
   ENTITIES =
-    '&': '&amp;'
     '<': '&lt;'
     '>': '&gt;'
     "'": '&#x27;'
@@ -88,8 +86,12 @@ class AnsiSpan
   ESCAPE_PATTERN = new RegExp("[#{(Object.keys(ENTITIES).join(''))}]", 'g');
 
   create: (text, style) ->
-    "<span class='#{style.toClass()}'>#{@_escapeHTML(text)}</span>"
+    span = document.createElement('span')
+    span.textContent = text
+    span.className = style.toClass()
+    span
 
   _escapeHTML: (text) ->
     text.replace ESCAPE_PATTERN, (char) ->
+      text;
       ENTITIES[char]
