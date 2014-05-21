@@ -1,4 +1,4 @@
-class AnsiStream
+class @AnsiStream
   constructor: ->
     @style = new AnsiStyle()
     @span = new AnsiSpan()
@@ -78,20 +78,8 @@ class AnsiStyle
     this[layer] = COLORS[number % 10]
 
 class AnsiSpan
-  ENTITIES =
-    '<': '&lt;'
-    '>': '&gt;'
-    "'": '&#x27;'
-
-  ESCAPE_PATTERN = new RegExp("[#{(Object.keys(ENTITIES).join(''))}]", 'g');
-
   create: (text, style) ->
     span = document.createElement('span')
-    span.textContent = text
+    span.innerHTML = text
     span.className = style.toClass()
     span
-
-  _escapeHTML: (text) ->
-    text.replace ESCAPE_PATTERN, (char) ->
-      text;
-      ENTITIES[char]

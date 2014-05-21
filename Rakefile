@@ -1,25 +1,28 @@
 require "bundler/gem_tasks"
 require 'jasmine'
 require 'coffee-script'
+require 'fileutils'
 load 'jasmine/tasks/jasmine.rake'
 
-task :vendorize do
+task :compile do
   def compile(file, target)
     File.new(target, "w").write(CoffeeScript.compile(File.read(file), bare: true))
   end
 
-  Dir['src/**/*.coffee'].each do |file|
-    target = file.gsub(/^src/, "vendor/assets").gsub(/.coffee$/, ".js")
-    compile(file, target)
+  def compile_dir(source_dir, target_dir)
+    FileUtils.mkdir_p target_dir
+
+    Dir["#{source_dir}/**/*.coffee"].each do |file|
+      target = "#{target_dir}/#{File.basename(file, ".coffee")}.js"
+      compile(file, target)
+    end
   end
 
-  Dir['spec/**/*.coffee'].each do |file|
-    target = file.gsub(/.coffee$/, ".js")
-    compile(file, target)
-  end
+  compile_dir('vendor', 'tmp/assets')
+  compile_dir('spec', 'tmp/spec')
 end
 
 task :test do
 end
 
-task default: [:vendorize, 'jasmine:ci']
+task default: [:compile, 'jasmine:ci']
