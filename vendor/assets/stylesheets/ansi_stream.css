@@ -1,0 +1,67 @@
+.ansi-underline {
+  text-decoration: underline;
+}
+
+.ansi-foreground-black {
+  color: rgb(0,0,0);
+}
+
+.ansi-foreground-red {
+  color: rgb(194,54,33);
+}
+
+.ansi-foreground-green {
+  color: rgb(37,188,36);
+}
+
+.ansi-foreground-yellow {
+  color: rgb(173,173,39);
+}
+
+.ansi-foreground-blue {
+  color: rgb(73,46,225);
+}
+
+.ansi-foreground-magenta {
+  color: rgb(211,56,211);
+}
+
+.ansi-foreground-cyan {
+  color: rgb(51,187,200);
+}
+
+.ansi-foreground-default {
+}
+
+// Background
+
+.ansi-background-black {
+  background-color: rgb(129,131,131);
+}
+
+.ansi-foreground-red {
+  background-color: rgb(252,57,31);
+}
+
+.ansi-background-green {
+  background-color: rgb(49,231,34);
+}
+
+.ansi-background-yellow {
+  background-color: rgb(234,236,35);
+}
+
+.ansi-background-blue {
+  background-color: rgb(88,51,255);
+}
+
+.ansi-background-magenta {
+  background-color: rgb(249,53,248);
+}
+
+.ansi-background-cyan {
+  background-color: rgb(20,240,240);
+}
+
+.ansi-background-default {
+}

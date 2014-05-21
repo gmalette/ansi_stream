@@ -18,8 +18,12 @@ AnsiStream = (function() {
       for (_i = 0, _len = parts.length; _i < _len; _i++) {
         part = parts[_i];
         _ref = this._extractTextAndStyles(part), partText = _ref[0], styles = _ref[1];
-        this.style.apply(styles);
-        _results.push(this.span.create(partText, this.style));
+        if (styles) {
+          this.style.apply(styles);
+          _results.push(this.span.create(partText, this.style));
+        } else {
+          _results.push(partText);
+        }
       }
       return _results;
     }).call(this);
@@ -28,7 +32,7 @@ AnsiStream = (function() {
 
   AnsiStream.prototype._extractTextAndStyles = function(originalText) {
     var matches, numbers, text, _ref;
-    matches = originalText.match(/([\d;]*)m([^]*)/m);
+    matches = originalText.match(/^([\d;]*)m([^]*)$/m);
     if (!matches) {
       return [originalText, null];
     }
@@ -73,10 +77,14 @@ AnsiStyle = (function() {
         _results.push(this.reset());
       } else if (style === 1) {
         _results.push(this.bright = true);
-      } else if ((30 <= style && style < 39) && style !== 38) {
+      } else if ((30 <= style && style <= 39) && style !== 38) {
         _results.push(this._applyStyle('foreground', style));
-      } else if ((40 <= style && style < 49) && style !== 48) {
+      } else if ((40 <= style && style <= 49) && style !== 48) {
         _results.push(this._applyStyle('background', style));
+      } else if (style === 4) {
+        _results.push(this.underline = true);
+      } else if (style === 24) {
+        _results.push(this.underline = false);
       } else {
         _results.push(void 0);
       }
@@ -85,7 +93,8 @@ AnsiStyle = (function() {
   };
 
   AnsiStyle.prototype.reset = function() {
-    return this.background = this.foreground = this.bright = null;
+    this.background = this.foreground = 'default';
+    return this.underline = this.bright = false;
   };
 
   AnsiStyle.prototype.toClass = function() {
@@ -99,6 +108,9 @@ AnsiStyle = (function() {
     }
     if (this.bright) {
       classes.push("ansi-bright");
+    }
+    if (this.underline) {
+      classes.push("ansi-underline");
     }
     return classes.join(" ");
   };
@@ -120,7 +132,6 @@ AnsiSpan = (function() {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
-    '"': '&quot;',
     "'": '&#x27;'
   };
 

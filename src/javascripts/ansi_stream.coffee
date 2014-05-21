@@ -9,13 +9,16 @@ class AnsiStream
 
     spans = for part in parts
       [partText, styles] = @_extractTextAndStyles(part)
-      @style.apply(styles)
-      @span.create(partText, @style)
+      if styles
+        @style.apply(styles)
+        @span.create(partText, @style)
+      else
+        partText
 
     spans
 
   _extractTextAndStyles: (originalText) ->
-    matches = originalText.match(/([\d;]*)m([^]*)/m)
+    matches = originalText.match(/^([\d;]*)m([^]*)$/m)
 
     return [originalText, null] unless matches
 
@@ -46,13 +49,18 @@ class AnsiStyle
         @reset()
       else if style == 1
         @bright = true
-      else if 30 <= style < 39 and style != 38
+      else if 30 <= style <= 39 and style != 38
         @_applyStyle('foreground', style)
-      else if 40 <= style < 49 and style != 48
+      else if 40 <= style <= 49 and style != 48
         @_applyStyle('background', style)
+      else if style == 4
+        @underline = true
+      else if style == 24
+        @underline = false
 
   reset: ->
-    @background = @foreground = @bright = null
+    @background = @foreground = 'default'
+    @underline = @bright = false
 
   toClass: ->
     classes = []
@@ -62,6 +70,8 @@ class AnsiStyle
       classes.push("ansi-foreground-#{@foreground}")
     if @bright
       classes.push("ansi-bright")
+    if @underline
+      classes.push("ansi-underline")
 
     classes.join(" ")
 
@@ -73,7 +83,6 @@ class AnsiSpan
     '&': '&amp;'
     '<': '&lt;'
     '>': '&gt;'
-    '"': '&quot;'
     "'": '&#x27;'
 
   ESCAPE_PATTERN = new RegExp("[#{(Object.keys(ENTITIES).join(''))}]", 'g');

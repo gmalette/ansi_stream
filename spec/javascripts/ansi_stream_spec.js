@@ -1,5 +1,5 @@
 describe("AnsiStream", function() {
-  var expectClass, expectNoClass, stream;
+  var expectClass, stream;
   stream = null;
   beforeEach(function() {
     return stream = new AnsiStream();
@@ -7,11 +7,8 @@ describe("AnsiStream", function() {
   expectClass = function(span, color) {
     return expect(span).toMatch(new RegExp("class='[^']*" + color + ".*'"));
   };
-  expectNoClass = function(span) {
-    return expect(span).toMatch(/class=''/);
-  };
   it('returns uncolorized spans if there are no escape codes', function() {
-    return expect(stream.process("toto")[0]).toMatch(/class=''/);
+    return expect(stream.process("toto")[0]).toBe("toto");
   });
   it('returns colorized spans if there is an foreground color code', function() {
     return expectClass(stream.process('\u001B[31mtoto')[0], 'ansi-foreground-red');
@@ -30,9 +27,15 @@ describe("AnsiStream", function() {
     var spans;
     spans = stream.process("\u001B[41;31mtoto\u001B[0mtiti");
     expectClass(spans[0], 'ansi-background-red');
-    return expectNoClass(spans[1]);
+    return expectClass(spans[1], 'ansi-background-default');
   });
-  return it('makes the text bright', function() {
+  it('makes the text bright', function() {
     return expectClass(stream.process("\u001B[1mtoto")[0], 'ansi-bright');
+  });
+  return it('handles underline', function() {
+    var spans;
+    spans = stream.process("\u001B[4mtoto\u001B[24mtiti");
+    expectClass(spans[0], 'ansi-underline');
+    return expect(spans[1].indexOf('ansi-underline')).toBe(-1);
   });
 });
