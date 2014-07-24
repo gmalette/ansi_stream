@@ -5,9 +5,10 @@ class @AnsiStream
 
   process: (text) ->
     parts = text.split(/\033\[/)
-    parts = parts.filter (part) -> part
 
     spans = document.createDocumentFragment()
+    first_part = parts.shift()
+    spans.appendChild(@span.create(first_part, @style)) if first_part
     for part in parts
       [partText, styles] = @_extractTextAndStyles(part)
       @style.apply(styles)
@@ -17,7 +18,7 @@ class @AnsiStream
     spans
 
   _extractTextAndStyles: (originalText) ->
-    matches = originalText.match(/^([\d;]*)m([^]*)$/m)
+    matches = originalText.match(/^([\d;]*)m([^]*)$/)
 
     return [originalText, null] unless matches
 
