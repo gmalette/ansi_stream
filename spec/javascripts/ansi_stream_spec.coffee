@@ -7,9 +7,10 @@ describe "AnsiStream", ->
     expect(span.className.indexOf(color)).toBeGreaterThan(-1)
 
   it 'returns uncolorized spans if there are no escape codes', ->
-    span = stream.process("toto").childNodes[0]
+    span = stream.process("mkdir").childNodes[0]
     expectClass(span, 'ansi-background-default')
     expectClass(span, 'ansi-foreground-default')
+    expect(span.innerHTML).toBe('mkdir')
 
   it 'returns colorized spans if there is an foreground color code', ->
     expectClass(stream.process('\u001B[31mtoto').childNodes[0], 'ansi-foreground-red')
@@ -35,4 +36,3 @@ describe "AnsiStream", ->
     spans = stream.process("\u001B[4mtoto\u001B[24mtiti")
     expectClass(spans.childNodes[0], 'ansi-underline')
     expect(spans.childNodes[1].className.indexOf('ansi-underline')).toBe(-1)
-
