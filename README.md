@@ -1,6 +1,10 @@
+[![Build Status](https://travis-ci.org/gmalette/ansi_stream.svg?branch=master)](https://travis-ci.org/gmalette/ansi_stream)
+
 # AnsiStream
 
-TODO: Write a gem description
+This gem can be used with Rails applications to colorize ANSI strings.
+
+![Screenshot](https://raw.githubusercontent.com/gmalette/ansi_stream/master/screenshots/screenshot.png)
 
 ## Installation
 
@@ -18,7 +22,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```html
+<code>
+  # content
+</code>
+
+<script>
+  var stream = new AnsiStream()
+
+  onStreamText: (text) ->
+    $('code').append(stream.process(text))
+</script>
+```
 
 ## Contributing
 
