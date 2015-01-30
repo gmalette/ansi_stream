@@ -24,5 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "phantomjs", "~> 1.9"
   spec.add_development_dependency "coffee-script"
   spec.add_development_dependency "pry"
-  spec.add_development_dependency "pry-debugger"
+  spec.add_development_dependency "pry-byebug"
 end
