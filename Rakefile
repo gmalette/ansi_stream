@@ -3,7 +3,7 @@ require 'jasmine'
 require 'coffee-script'
 require 'fileutils'
 require 'pry'
-require 'pry-debugger'
+require 'pry-byebug'
 load 'jasmine/tasks/jasmine.rake'
 
 task :compile do
