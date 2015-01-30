@@ -2,8 +2,6 @@ require "bundler/gem_tasks"
 require 'jasmine'
 require 'coffee-script'
 require 'fileutils'
-require 'pry'
-require 'pry-byebug'
 load 'jasmine/tasks/jasmine.rake'
 
 task :compile do
