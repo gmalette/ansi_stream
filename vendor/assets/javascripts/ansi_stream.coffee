@@ -4,7 +4,7 @@ class @AnsiStream
     @span = new AnsiSpan()
 
   process: (text) ->
-    parts = text.split(/\033\[/)
+    parts = text.split(`/\033\[/`)
 
     spans = document.createDocumentFragment()
     first_part = parts.shift()
