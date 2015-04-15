@@ -41,3 +41,6 @@ describe "AnsiStream", ->
     spans = stream.process("\u001B[4mtoto\u001B[24mtiti")
     expectClass(spans.childNodes[0], 'ansi-underline')
     expect(spans.childNodes[1].className.indexOf('ansi-underline')).toBe(-1)
+
+  it 'can strip ANSI codes from a string', ->
+    expect(AnsiStream.strip('\u001B[31mtoto')).toBe('toto')
