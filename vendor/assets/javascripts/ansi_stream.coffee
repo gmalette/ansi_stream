@@ -81,6 +81,6 @@ class AnsiStyle
 class AnsiSpan
   create: (text, style) ->
     span = document.createElement('span')
-    span.innerHTML = text
+    span.textContent = text
     span.className = style.toClass()
     span

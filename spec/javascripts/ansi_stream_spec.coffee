@@ -12,6 +12,11 @@ describe "AnsiStream", ->
     expectClass(span, 'ansi-foreground-default')
     expect(span.innerHTML).toBe('mkdir')
 
+
+  it 'is not subject to XSS', ->
+    span = stream.process("echo <script>alert('pwned!')").childNodes[0]
+    expect(span.innerHTML).toBe("echo &lt;script&gt;alert('pwned!')")
+
   it 'returns colorized spans if there is an foreground color code', ->
     expectClass(stream.process('\u001B[31mtoto').childNodes[0], 'ansi-foreground-red')
 
