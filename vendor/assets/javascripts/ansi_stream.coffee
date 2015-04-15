@@ -1,4 +1,17 @@
 class @AnsiStream
+  ANSI_CODE = ///
+    ((\u001b\[)|\u009b)
+    (
+      \d{0,3}
+      (;\d{0,3})*
+      [A-M|f-m]
+    )
+    |\u001b[A-M]
+  ///g
+
+  @strip: (text) ->
+    text.replace(ANSI_CODE, '')
+
   constructor: ->
     @style = new AnsiStyle()
     @span = new AnsiSpan()
